@@ -1,8 +1,6 @@
 package de.fiducia.myfirstspring.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import javax.validation.Valid;
@@ -19,12 +17,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import de.fiducia.myfirstspring.repositories.models.Person;
+import de.fiducia.myfirstspring.controllers.DTO.PersonDTO;
+import de.fiducia.myfirstspring.controllers.mapper.PersonMapper;
 import de.fiducia.myfirstspring.services.PersonService;
 import de.fiducia.myfirstspring.services.PersonServiceException;
 

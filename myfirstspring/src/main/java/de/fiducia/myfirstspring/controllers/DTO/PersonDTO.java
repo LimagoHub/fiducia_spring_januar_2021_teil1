@@ -1,4 +1,4 @@
-package de.fiducia.myfirstspring.controllers;
+package de.fiducia.myfirstspring.controllers.DTO;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
