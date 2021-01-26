@@ -3,6 +3,7 @@ package de.fiducia.myfirstspring.repositories.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +18,9 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tblPersonen")
+
+
+@NamedQuery(name = "Person.findAllPersonsAsList", query = "select p from Person p")
 public class Person {
 	
 	@Id
