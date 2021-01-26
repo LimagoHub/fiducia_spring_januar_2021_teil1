@@ -38,12 +38,13 @@ public class DemoController {
 	static final String V1_PERSONS = "/v1/persons";
 
 	private final PersonService personService;
-	
+	private final PersonMapper personMapper;
 	
 
 
-	public DemoController(final PersonService personService) {
+	public DemoController(final PersonService personService, final PersonMapper personMapper) {
 		this.personService = personService;
+		this.personMapper  = personMapper;
 	}
 
 	@GetMapping(path="/gruss", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -98,14 +99,9 @@ public class DemoController {
 	@PutMapping(path="/person",consumes=MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> saveOrUpdate(@Valid @RequestBody PersonDTO person) throws PersonServiceException {
 		
-		Person p = Person
-				.builder()
-				.id(person.getId())
-				.vorname(person.getVorname())
-				.nachname(person.getNachname())
-				.build();
 		
-		personService.speichern(p);
+		
+		personService.speichern(personMapper.convert(person));
 		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
