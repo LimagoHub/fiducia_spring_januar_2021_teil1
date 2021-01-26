@@ -24,6 +24,10 @@ import org.springframework.web.context.annotation.SessionScope;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import de.fiducia.myfirstspring.repositories.models.Person;
+import de.fiducia.myfirstspring.services.PersonService;
+import de.fiducia.myfirstspring.services.PersonServiceException;
+
 
 
 @RestController
@@ -33,7 +37,14 @@ public class DemoController {
 	
 	static final String V1_PERSONS = "/v1/persons";
 
+	private final PersonService personService;
+	
+	
 
+
+	public DemoController(final PersonService personService) {
+		this.personService = personService;
+	}
 
 	@GetMapping(path="/gruss", produces = MediaType.TEXT_PLAIN_VALUE)
 	public String getGreeting() {
@@ -85,9 +96,17 @@ public class DemoController {
 	}
 	
 	@PutMapping(path="/person",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> saveOrUpdate(@Valid @RequestBody PersonDTO person) {
+	public ResponseEntity<Void> saveOrUpdate(@Valid @RequestBody PersonDTO person) throws PersonServiceException {
 		
-		System.out.println("Person " + person + " wird gespeichert!" );
+		Person p = Person
+				.builder()
+				.id(person.getId())
+				.vorname(person.getVorname())
+				.nachname(person.getNachname())
+				.build();
+		
+		personService.speichern(p);
+		
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 

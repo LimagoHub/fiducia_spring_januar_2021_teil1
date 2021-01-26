@@ -1,17 +1,7 @@
 package de.fiducia.myfirstspring.demo;
 
-import org.springframework.stereotype.Component;
+public interface Dependency {
 
-@Component
-public class Dependency {
-	
-	public Dependency() {
-		System.out.println("ctor dependency");
-	}
-	
-	
-	public String foo(String message) {
-		return message.toUpperCase();
-	}
+	String foo(String message);
 
 }
