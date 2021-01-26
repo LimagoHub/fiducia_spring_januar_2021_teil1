@@ -53,30 +53,18 @@ public class DemoController {
 	}
 
 	@GetMapping(path="/person/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<PersonDTO> getPersonById(@PathVariable(name="id") String id) {
-		
-		PersonDTO retval = new PersonDTO();
-		retval.setId(id);
-		Optional<PersonDTO> person = Optional.of(retval);
+	public ResponseEntity<PersonDTO> getPersonById(@PathVariable(name="id") String id) throws PersonServiceException {
 		
 		
 		
-		return ResponseEntity.of(person);
+		return ResponseEntity
+				.of(personService.ladePersonNachId(id).map(personMapper::convert));
 	}
 	
 	@GetMapping(path="", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<PersonDTO>> getPersonByFirstname(@RequestParam String vorname) {
+	public ResponseEntity<List<PersonDTO>> getPersonByFirstname(@RequestParam String vorname) throws PersonServiceException {
 		
-		PersonDTO retval = new PersonDTO();
-		retval.setId("10");
-		retval.setVorname(vorname);
-		
-		List<PersonDTO> liste  = new ArrayList<>();
-		
-		liste.add(retval);
-		
-		
-		return ResponseEntity.ok(liste);
+		return ResponseEntity.ok(personMapper.convert(personService.ladePersonenNachVorname(vorname)));
 	}
 
 	// Post als Get-Ersatz weil wir ein Parameterobjekt verwenden Safe=true idempotent=true
@@ -91,9 +79,11 @@ public class DemoController {
 	}
 	
 	@DeleteMapping(path="/person/{id}")
-	public ResponseEntity<Void> delete(@PathVariable(name="id") String id) {
-		// Löschen durchführen
-		return ResponseEntity.ok().build();
+	public ResponseEntity<Void> delete(@PathVariable(name="id") String id) throws PersonServiceException {
+		if(personService.loesche(id))
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.notFound().build();
 	}
 	
 	@PutMapping(path="/person",consumes=MediaType.APPLICATION_JSON_VALUE)
@@ -101,9 +91,9 @@ public class DemoController {
 		
 		
 		
-		personService.speichern(personMapper.convert(person));
+		HttpStatus status = personService.speichern(personMapper.convert(person))? HttpStatus.OK: HttpStatus.CREATED;
 		
-		return ResponseEntity.status(HttpStatus.CREATED).build();
+		return ResponseEntity.status(status).build();
 	}
 
 
