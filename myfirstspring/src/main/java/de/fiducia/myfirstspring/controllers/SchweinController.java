@@ -57,7 +57,7 @@ public class SchweinController {
 	@PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> speichern(@Valid @RequestBody SchweinDTO dto) {
 		HttpStatus status = service.speichern(mapper.convert(dto))?HttpStatus.OK:HttpStatus.CREATED;
-		return ResponseEntity.status(status).build();
+		return ResponseEntity.status(status).build(); 
 		
 	}
 
