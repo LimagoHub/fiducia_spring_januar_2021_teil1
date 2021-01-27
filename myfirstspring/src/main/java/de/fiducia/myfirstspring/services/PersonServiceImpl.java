@@ -21,43 +21,43 @@ public class PersonServiceImpl implements PersonService {
 	
 	@Override
 	public boolean speichern(Person person) throws PersonServiceException{
-		try {
-			
-			checkPerson(person);
-			boolean retval = repo.existsById(person.getId());
-			person = repo.save(person);  // Immer mit retval weiter arbeiten
-
-			return  retval;
-			
-			//person.setVorname("Erika");;
-			
-			
-			
-		} catch (RuntimeException e) {
-			throw new PersonServiceException("Upps", e);
-		}
 		
+		
+		try {
+			return speichernImpl(person);
+		} catch (RuntimeException e) {
+			throw new PersonServiceException("Service nicht erreichbar.", e);
+		}
+		 
+	}
+
+	@Override
+	public boolean speichern(String id, String vorname, String nachname) throws PersonServiceException {
+		Person p = Person.builder().id(id).vorname(vorname).nachname(nachname).build();
+		
+		return speichern(p);
+	}
+
+	private boolean speichernImpl(Person person) throws PersonServiceException {
+		pruefePerson(person);
+		repo.save(person);
+		return true;
 	}
 
 
-	private void checkPerson(Person person) throws PersonServiceException {
-		validatePerson(person);
-		businesCheck(person);
-	}
-
-
-	private void businesCheck(Person person) throws PersonServiceException {
+	private void pruefePerson(Person person) throws PersonServiceException {
+		if(person == null)
+			throw new PersonServiceException("Parameter darf nicht null sein.");
+		
+		if(person.getVorname() == null || person.getVorname().length() < 2)
+			throw new PersonServiceException("Vorname muss min. 2 Zeichen enthalten.");
+		
 		if(antipathen.contains(person.getVorname()))
 			throw new PersonServiceException("Antipath");
 	}
 
 
-	private void validatePerson(Person person) throws PersonServiceException {
-		if(person == null) 
-			throw new PersonServiceException("Person darf nicht null sein");
-		if(person.getVorname() == null || person.getVorname().length() < 2)
-			throw new PersonServiceException("Vorname muss min. 2 Zeichen enthalten.");
-	}
+	
 	
 
 	public void bulkSpeichern(List<Person> persons) throws PersonServiceException{
@@ -106,4 +106,6 @@ public class PersonServiceImpl implements PersonService {
 		}
 	}
 
+
+	
 }

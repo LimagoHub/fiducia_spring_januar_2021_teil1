@@ -8,6 +8,7 @@ import de.fiducia.myfirstspring.repositories.models.Person;
 public interface PersonService {
 
 	boolean speichern(Person person) throws PersonServiceException;
+	boolean speichern(String id, String vorname, String nachname) throws PersonServiceException;
 	boolean loesche(String id) throws PersonServiceException;
 	Optional<Person> ladePersonNachId(String id) throws PersonServiceException;
 	List<Person> ladePersonenNachVorname(String vorname) throws PersonServiceException;

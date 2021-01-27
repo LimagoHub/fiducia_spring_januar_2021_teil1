@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.fiducia.myfirstspring.controllers.DTO.SchweinDTO;
 import de.fiducia.myfirstspring.controllers.mapper.SchweinMapper;
 import de.fiducia.myfirstspring.services.SchweinService;
+import de.fiducia.myfirstspring.services.domainobjects.Schwein;
 
 @RestController
 @RequestMapping("/v1/schweine")
@@ -42,14 +43,15 @@ public class SchweinController {
 		return ResponseEntity.of(service.ladeSchweinNachId(id).map(mapper::convert));
 	}
 
-	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<SchweinDTO>> getAllSchweine() {
-		return ResponseEntity.ok(mapper.convert(service.ladeAlleSchweine()));
-	}
+//	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+//	public ResponseEntity<List<SchweinDTO>> getSchweineByName() {
+//		return ResponseEntity.ok(mapper.convert(service.ladeAlleSchweine()));
+//	}
 	
-	@GetMapping(path = "/query", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<SchweinDTO>> getSchweineByName(@RequestParam String name) {
-		return ResponseEntity.ok(mapper.convert(service.ladeSchweinNachName(name)));
+	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<SchweinDTO>> getSchweineByName(@RequestParam(required = false) String name) {
+		List<Schwein> retval = name == null ? service.ladeAlleSchweine(): service.ladeSchweinNachName(name);
+		return ResponseEntity.ok(mapper.convert(retval));
 	}
 	
 	@PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
