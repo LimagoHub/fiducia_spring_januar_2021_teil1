@@ -1,15 +1,10 @@
 package de.fiducia.myfirstspring.demo;
 
-import java.util.UUID;
-
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import de.fiducia.myfirstspring.repositories.PersonRepository;
-import de.fiducia.myfirstspring.repositories.models.Person;
 
 @Component
 //@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -18,12 +13,12 @@ public class Demo {
 	
 	
 	private final Dependency dependency;
-	private final PersonRepository repo;
+	
 	
 	@Autowired
-	public Demo(final Dependency dependency, final PersonRepository repo) {
+	public Demo(final Dependency dependency) {
 		this.dependency =dependency;
-		this.repo = repo;
+		
 		System.out.println(dependency.foo("Ctor Demo"));
 	}
 	

@@ -96,7 +96,7 @@ public class DemoController {
 
 
 	@PostMapping(path="/person",consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Void> saveNotIdempotent(@Valid @RequestBody PersonDTO person,  UriComponentsBuilder b) throws PersonenServiceException {
+	public ResponseEntity<Void> saveNotIdempotent(@Valid @RequestBody PersonDTO person,  UriComponentsBuilder b)  {
 		person.setId(UUID.randomUUID().toString());
 		System.out.println("Person " + person + " wird gespeichert!" );
 		

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import de.fiducia.myfirstspring.services.PersonServiceException;
+
 
 
 @ControllerAdvice
@@ -23,8 +25,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler{
 	
 	
 	
-	@ExceptionHandler(PersonenServiceException.class)
-    public ResponseEntity<Object> handlePersonenServiceException(PersonenServiceException ex, WebRequest request) {
+	@ExceptionHandler(PersonServiceException.class)
+    public ResponseEntity<Object> handlePersonenServiceException(PersonServiceException ex, WebRequest request) {
 
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());

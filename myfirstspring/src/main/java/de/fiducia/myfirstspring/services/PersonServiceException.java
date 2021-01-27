@@ -2,6 +2,9 @@ package de.fiducia.myfirstspring.services;
 
 public class PersonServiceException extends Exception {
 
+	
+	private static final long serialVersionUID = 3387952005216037483L;
+
 	public PersonServiceException() {
 		// TODO Auto-generated constructor stub
 	}
