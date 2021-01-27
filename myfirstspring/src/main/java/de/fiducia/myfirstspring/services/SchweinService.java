@@ -8,8 +8,12 @@ import de.fiducia.myfirstspring.services.domainobjects.Schwein;
 public interface SchweinService {
 
 	Optional<Schwein> ladeSchweinNachId(String id);
+	List<Schwein> ladeSchweinNachName(String name);
+	List<Schwein> ladeAlleSchweine();
+
 
 	boolean speichern(Schwein schwein);
+	boolean loeschen(String id);
 
 	// Nicht idempotent
 	void fuettern(String id);
@@ -17,6 +21,5 @@ public interface SchweinService {
 	// idempotent
 	void fuettern(Schwein schwein);
 
-	List<Schwein> ladeAlleSchwein();
-
+	
 }

@@ -8,12 +8,14 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.fiducia.myfirstspring.controllers.DTO.SchweinDTO;
@@ -35,24 +37,37 @@ public class SchweinController {
 		this.mapper = mapper;
 	}
 	
-	@GetMapping(path = "/schwein/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SchweinDTO> getSchweinByID(@PathVariable String id) {
 		return ResponseEntity.of(service.ladeSchweinNachId(id).map(mapper::convert));
 	}
 
 	@GetMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<SchweinDTO>> getAllSchweine() {
-		return ResponseEntity.ok(mapper.convert(service.ladeAlleSchwein()));
+		return ResponseEntity.ok(mapper.convert(service.ladeAlleSchweine()));
 	}
 	
-	@PutMapping(path = "/schwein", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(path = "/query", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<SchweinDTO>> getSchweineByName(@RequestParam String name) {
+		return ResponseEntity.ok(mapper.convert(service.ladeSchweinNachName(name)));
+	}
+	
+	@PutMapping(path = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> speichern(@Valid @RequestBody SchweinDTO dto) {
 		HttpStatus status = service.speichern(mapper.convert(dto))?HttpStatus.OK:HttpStatus.CREATED;
 		return ResponseEntity.status(status).build();
 		
 	}
 
-	@PostMapping(path = "/schwein/{id}/fuettern")
+	@DeleteMapping(path = "/{id}")
+	public ResponseEntity<Void> loeschen(@PathVariable String id) {
+		if(service.loeschen(id))
+			return ResponseEntity.ok().build();
+		return ResponseEntity.notFound().build();
+		
+	}
+
+	@PostMapping(path = "/{id}/fuettern")
 	public ResponseEntity<Void> fuettern(@PathVariable String id) {
 		
 		service.fuettern(id);

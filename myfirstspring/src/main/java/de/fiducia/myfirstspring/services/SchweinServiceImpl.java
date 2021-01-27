@@ -53,12 +53,26 @@ public class SchweinServiceImpl implements SchweinService {
 	}
 
 	@Override
-	public List<Schwein> ladeAlleSchwein() {
+	public List<Schwein> ladeAlleSchweine() {
 		
 		List<SchweinEntity> retval = new ArrayList<>();
 		repo.findAll().forEach(retval::add);
 		
 		return mapper.convert(retval);
+	}
+
+	@Override
+	public List<Schwein> ladeSchweinNachName(String name) {
+		return mapper.convert(repo.findByName(name));
+	}
+
+	@Override
+	public boolean loeschen(String id) {
+		if(repo.existsById(id)) {
+			repo.deleteById(id);
+			return true;
+		}
+		return false;
 	}
 	
 	
